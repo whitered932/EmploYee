@@ -11,17 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "app",
+    options.AddDefaultPolicy(
         policy  =>
         {
-            policy.WithOrigins("http://example.com");
+            policy.WithOrigins("http://example.com").AllowAnyHeader().AllowAnyMethod();
         });
 });
 builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 var app = builder.Build();
 
-app.UseCors("app");
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
