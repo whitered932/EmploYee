@@ -2,6 +2,7 @@
 using EmploYee.Core.Specifications;
 using Ftsoft.Application.Cqs.Mediatr;
 using Ftsoft.Common.Result;
+using Startup.Features.Errors;
 
 namespace Startup.Features.Task;
 
@@ -18,6 +19,10 @@ public sealed class UpdateTaskStatusCommandHandler(ITaskRepository taskRepositor
         var task =
             await taskRepository.SingleOrDefaultAsync(TaskSpecification.GetById(request.Id).IsSatisfiedBy(),
                 cancellationToken);
+        if (task is null)
+        {
+            return Error(NotFoundError.Instance);
+        }
         task.UpdateStatus(request.Status);
         await taskRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return Successful();

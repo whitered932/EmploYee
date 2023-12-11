@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EmploYee.Infrastructure.Migrations
 {
     [DbContext(typeof(EmploYeeDbContext))]
-    [Migration("20231210135532_Initial")]
+    [Migration("20231211094350_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -202,6 +202,41 @@ namespace EmploYee.Infrastructure.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EmploYee.Core.Models.Employee", b =>
+                {
+                    b.OwnsMany("EmploYee.Core.Models.EmployeeAchievementHistory", "AchievementHistories", b1 =>
+                        {
+                            b1.Property<long>("EmployeeId")
+                                .HasColumnType("bigint");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<double>("CurrentValue")
+                                .HasColumnType("double precision");
+
+                            b1.Property<string>("Image")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Title")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("EmployeeId", "Id");
+
+                            b1.ToTable("EmployeeAchievementHistory");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EmployeeId");
+                        });
+
+                    b.Navigation("AchievementHistories");
                 });
 #pragma warning restore 612, 618
         }

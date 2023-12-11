@@ -3,6 +3,7 @@ using EmploYee.Core.Specifications;
 using Ftsoft.Application.Cqs.Mediatr;
 using Ftsoft.Common.Result;
 using Startup.Features.Employees.Models;
+using Startup.Features.Errors;
 using TaskStatus = EmploYee.Core.Models.TaskStatus;
 
 namespace Startup.Features.Employees;
@@ -13,8 +14,12 @@ public class GetEmployeeQuery : Query<EmployeeDto>
 }
 
 public sealed class GetEmployeeQueryHandler
-    (IEmployeeRepository employeeRepository, ITaskRepository taskRepository) : QueryHandler<GetEmployeeQuery,
-        EmployeeDto>
+(
+    IEmployeeRepository employeeRepository,
+    ITaskRepository taskRepository,
+    IAchievementRepository achievementRepository
+) : QueryHandler<GetEmployeeQuery,
+    EmployeeDto>
 {
     public override async Task<Result<EmployeeDto>> Handle(GetEmployeeQuery request,
         CancellationToken cancellationToken)
@@ -22,10 +27,19 @@ public sealed class GetEmployeeQueryHandler
         var employee =
             await employeeRepository.SingleOrDefaultAsync(EmployeeSpecification.GetById(request.Id).IsSatisfiedBy(),
                 cancellationToken);
-        var employeeTasks = await taskRepository.ListAsync(TaskSpecification.GetByPerformerId(employee.Id).IsSatisfiedBy(),
+        if (employee is null)
+        {
+            return Error(NotFoundError.Instance);
+        }
+
+        var employeeTasks = await taskRepository.ListAsync(
+            TaskSpecification.GetByPerformerId(employee.Id).IsSatisfiedBy(),
             cancellationToken);
         var completedCount = employeeTasks.Count(x => x.Status == TaskStatus.Approved);
         var taskCount = employeeTasks.Count;
+
+        var achievementCount = await achievementRepository.CountAsync(cancellationToken);
+        var collectedAchievementsCount = employee.AchievementHistories.Count;
         
         var employeeDto = new EmployeeDto()
         {

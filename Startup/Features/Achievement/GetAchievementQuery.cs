@@ -4,6 +4,7 @@ using Ftsoft.Application.Cqs.Mediatr;
 using Ftsoft.Common.Result;
 using Startup.Features.Achievement.Models;
 using Startup.Features.Employees.Models;
+using Startup.Features.Errors;
 
 namespace Startup.Features.Achievement;
 
@@ -21,6 +22,10 @@ public sealed class GetAchievementQueryHandler
         var achievement =
             await achievementRepository.SingleOrDefaultAsync(AchievementSpecification.GetById(request.Id).IsSatisfiedBy(),
                 cancellationToken);
+        if (achievement is null)
+        {
+            return Error(NotFoundError.Instance);
+        }
         var achievementDto = new AchievementDto()
         {
             Id = achievement.Id,

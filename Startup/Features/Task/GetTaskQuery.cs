@@ -2,6 +2,7 @@
 using EmploYee.Core.Specifications;
 using Ftsoft.Application.Cqs.Mediatr;
 using Ftsoft.Common.Result;
+using Startup.Features.Errors;
 using Startup.Features.Task.Models;
 
 namespace Startup.Features.Task;
@@ -20,6 +21,10 @@ public sealed class GetTaskQueryHandler
         var task =
             await taskRepository.SingleOrDefaultAsync(TaskSpecification.GetById(request.Id).IsSatisfiedBy(),
                 cancellationToken);
+        if (task is null)
+        {
+            return Error(NotFoundError.Instance);
+        }
         var taskDto = new TaskDto()
         {
             Id = task.Id,
