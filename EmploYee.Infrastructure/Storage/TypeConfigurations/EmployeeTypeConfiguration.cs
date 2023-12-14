@@ -8,6 +8,9 @@ public class EmployeeTypeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
     {
-        builder.OwnsMany(x => x.AchievementHistories);
+        builder.OwnsMany(x => x.AchievementHistories, (o) =>
+        {
+            o.ToJson();
+        });
     }
 }
