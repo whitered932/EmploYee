@@ -8,7 +8,7 @@ using TaskStatus = EmploYee.Core.Models.TaskStatus;
 
 namespace Startup.Features.Employees;
 
-public class GetEmployeeQuery : Query<EmployeeDto>
+public class GetEmployeeQuery : Query<GetEmployeeDto>
 {
     public long Id { get; set; }
 }
@@ -19,9 +19,9 @@ public sealed class GetEmployeeQueryHandler
     ITaskRepository taskRepository,
     IAchievementRepository achievementRepository
 ) : QueryHandler<GetEmployeeQuery,
-    EmployeeDto>
+    GetEmployeeDto>
 {
-    public override async Task<Result<EmployeeDto>> Handle(GetEmployeeQuery request,
+    public override async Task<Result<GetEmployeeDto>> Handle(GetEmployeeQuery request,
         CancellationToken cancellationToken)
     {
         var employee =
@@ -40,7 +40,7 @@ public sealed class GetEmployeeQueryHandler
 
         var achievementCount = await achievementRepository.CountAsync(cancellationToken);
         var collectedAchievementsCount = employee.AchievementHistories.Count;
-        
+
         var employeeDto = new EmployeeDto()
         {
             Id = employee.Id,
@@ -48,15 +48,14 @@ public sealed class GetEmployeeQueryHandler
             Patronymic = employee.Patronymic,
             Surname = employee.Surname,
             FirstName = employee.FirstName,
-            Address = new UserAddressDto()
-            {
-                City = employee.Address.City,
-                Country = employee.Address.Country,
-                Name = employee.Address.Name,
-            },
-            TaskCount = taskCount,
-            CompletedTaskCount = completedCount
+            City = employee.Address.City,
         };
-        return Successful(employeeDto);
+        var getEmployeeDto = new GetEmployeeDto()
+        {
+            Tasks = new CountItemDto { DoneCount = completedCount, AllCount = taskCount },
+            Achivements = new CountItemDto { DoneCount = collectedAchievementsCount, AllCount = achievementCount },
+            Profile = employeeDto,
+        };
+        return Successful(getEmployeeDto);
     }
 }

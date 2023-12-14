@@ -26,6 +26,11 @@ public class User : BaseEntity
         Address = new UserAddress(city, country, name);
     }
 
+    public string GetFullName()
+    {
+        return $"{Surname} {FirstName} {Patronymic}";
+    }
+    
     public string FirstName { get; private set; }
     public string Surname { get; private set; }
     public string Patronymic { get; private set; }

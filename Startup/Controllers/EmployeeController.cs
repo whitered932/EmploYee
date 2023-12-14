@@ -7,7 +7,7 @@ namespace Startup.Controllers;
 public class EmployeeController(IMediator mediator) : BaseController
 {
     [HttpPost("getOne")]
-    public async Task<IActionResult> GetEmployee(GetEmployeeQuery query)
+    public async Task<IActionResult> GetEmployee([FromBody] GetEmployeeQuery query)
     {
         var result = await mediator.Send(query);
         if (!result.IsSuccessfull)

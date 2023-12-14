@@ -5,30 +5,22 @@ using Startup.Features.Employees.Models;
 
 namespace Startup.Features.Employees;
 
-public class GetEmployeesQuery : Query<IReadOnlyList<EmployeeDto>>
+public class GetEmployeesQuery : Query<IReadOnlyList<EmployeeItemDto>>
 {
 }
 
 public sealed class GetEmployeesQueryHandler
-    (IEmployeeRepository employeeRepository) : QueryHandler<GetEmployeesQuery, IReadOnlyList<EmployeeDto>>
+    (IEmployeeRepository employeeRepository) : QueryHandler<GetEmployeesQuery, IReadOnlyList<EmployeeItemDto>>
 {
-    public override async Task<Result<IReadOnlyList<EmployeeDto>>> Handle(GetEmployeesQuery request,
+    public override async Task<Result<IReadOnlyList<EmployeeItemDto>>> Handle(GetEmployeesQuery request,
         CancellationToken cancellationToken)
     {
         var employees = await employeeRepository.ListAsync(cancellationToken);
-        var employeeDtos = employees.Select(employee => new EmployeeDto()
+        var employeeDtos = employees.Select(employee => new EmployeeItemDto()
         {
             Id = employee.Id,
-            Email = employee.Email,
-            Patronymic = employee.Patronymic,
-            Surname = employee.Surname,
-            FirstName = employee.FirstName,
-            Address = new UserAddressDto()
-            {
-                City = employee.Address.City,
-                Country = employee.Address.Country,
-                Name = employee.Address.Name,
-            }
+            Name = employee.GetFullName(),
+            Department = "",
         }).ToList();
         return Successful(employeeDtos);
     }

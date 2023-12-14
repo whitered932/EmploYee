@@ -1,17 +1,28 @@
 ﻿namespace Startup.Features.Employees.Models;
 
-public class EmployeeDto : ShortEmployeeDto
+public class GetEmployeeDto
 {
-    public UserAddressDto Address { get; set; }
-    public int TaskCount { get; set; }
-    public int CompletedTaskCount { get; set; }
-    public int AchievementsCollected { get; set; }
-    public int TotalAchievements { get; set; }
+    public EmployeeDto Profile { get; set; }
+    public CountItemDto Tasks { get; set; }
+    public CountItemDto Achivements { get; set; }
 }
 
-public class UserAddressDto
+public class EmployeeDto : ShortEmployeeDto
 {
+    public string FirstName { get; set; }
+    public string Surname { get; set; }
+    public string Patronymic { get; set; }
     public string City { get; set; }
-    public string Country { get; set; }
-    public string Name { get; set; }
+    public string Department { get; set; }
+    public string Curator { get; set; }
+    public string Phone { get; set; }
+    public string Position { get; set; }
+    public long Bithdate { get; set; }
+    public string Email { get; set; }
+}
+
+public class CountItemDto
+{
+    public int DoneCount { get; set; }
+    public int AllCount { get; set; }
 }
