@@ -18,6 +18,7 @@ public sealed class GetStagesQueryHandler
         var stages = await stageRepository.ListAsync(cancellationToken);
         var stagesDtos = stages.Select(x => new StageDto()
         {
+            Id = x.Id,
             Description = x.Description,
             Title = x.Title,
             ParentStageId = x.ParentStageId

@@ -15,7 +15,7 @@ public sealed class CreateDepartmentCommandHandler(IDepartmentRepository departm
     {
         var department = new EmploYee.Core.Models.Department(request.Title);
         await departmentRepository.AddAsync(department, cancellationToken);
-        await departmentRepository.SingleAsync(cancellationToken);
+        await departmentRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return Successful();
     }
 }
