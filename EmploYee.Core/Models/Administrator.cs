@@ -2,12 +2,23 @@
 
 public class Administrator : User
 {
-    private Administrator() : base()
+    private Administrator()
     {}
     
-    public Administrator(string firstName, string surname, string patronymic, string email, string password,
-        UserRole role, string city, string country, string name) : base(firstName, surname, patronymic, email, password,
-        role, city, country, name)
+    public Administrator(
+        string firstName,
+        string surname,
+        string patronymic,
+        string email,
+        string password,
+        UserRole role,
+        string city,
+        string country,
+        string name,
+        DateTime birthdayUtc
+    ) : base(firstName, surname,
+        patronymic, email, password,
+        role, city, country, name, birthdayUtc)
     {
     }
 }

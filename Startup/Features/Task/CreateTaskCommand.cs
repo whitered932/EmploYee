@@ -9,10 +9,10 @@ public class CreateTaskCommand : Command
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public DateTime? EndedAtUtc { get; set; }
-    public long StageId { get; set; }
+    public long EndedAtUtc { get; set; }
+    public long? StageId { get; set; }
     public double CurrencyValue { get; set; }
-    public long PerformerId { get; set; }
+    public List<long> AssignedIds { get; set; }
 }
 
 public sealed class CreateTaskCommandHandler
@@ -23,10 +23,10 @@ public sealed class CreateTaskCommandHandler
         var task = new EmploYee.Core.Models.Task(
             request.Title,
             request.Description,
-            request.StageId,
+            request.StageId ?? 0,
             request.CurrencyValue,
-            request.EndedAtUtc,
-            request.PerformerId);
+            DateTimeOffset.FromUnixTimeMilliseconds(request.EndedAtUtc).UtcDateTime,
+            request.AssignedIds);
         await taskRepository.AddAsync(task, cancellationToken);
         await taskRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return Successful();

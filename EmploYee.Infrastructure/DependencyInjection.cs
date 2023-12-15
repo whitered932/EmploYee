@@ -20,6 +20,8 @@ public static class DependencyInjection
         services.RegisterRepository<ICuratorRepository, CuratorRepository>();
         services.RegisterRepository<IAdministratorRepository, AdministratorRepository>();
         services.RegisterRepository<IAchievementRepository, AchievementRepository>();
+        services.RegisterRepository<IMeetingRepository, MeetingRepository>();
+        services.RegisterRepository<IDepartmentRepository, DepartmentRepository>();
 
         return services;
     }

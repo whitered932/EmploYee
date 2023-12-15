@@ -17,7 +17,8 @@ public sealed class GetEmployeeQueryHandler
 (
     IEmployeeRepository employeeRepository,
     ITaskRepository taskRepository,
-    IAchievementRepository achievementRepository
+    IAchievementRepository achievementRepository,
+    IDepartmentRepository departmentRepository
 ) : QueryHandler<GetEmployeeQuery,
     GetEmployeeDto>
 {
@@ -33,13 +34,16 @@ public sealed class GetEmployeeQueryHandler
         }
 
         var employeeTasks = await taskRepository.ListAsync(
-            TaskSpecification.GetByPerformerId(employee.Id).IsSatisfiedBy(),
+            TaskSpecification.GetByAssignedId(employee.Id).IsSatisfiedBy(),
             cancellationToken);
         var completedCount = employeeTasks.Count(x => x.Status == TaskStatus.Approved);
         var taskCount = employeeTasks.Count;
 
         var achievementCount = await achievementRepository.CountAsync(cancellationToken);
         var collectedAchievementsCount = employee.AchievementHistories.Count;
+
+        var department =
+            await departmentRepository.SingleOrDefaultAsync(x => x.Id == employee.DepartmentId, cancellationToken);
 
         var employeeDto = new EmployeeDto()
         {
@@ -49,6 +53,11 @@ public sealed class GetEmployeeQueryHandler
             Surname = employee.Surname,
             FirstName = employee.FirstName,
             City = employee.Address.City,
+            Curator = employee.Curator,
+            Bithdate = new DateTimeOffset(employee.BirthdayUtc).ToUnixTimeMilliseconds(),
+            Department = department?.Title ?? "Неизвестен",
+            Phone = employee.PhoneNumber,
+            Position = employee.Position
         };
         var getEmployeeDto = new GetEmployeeDto()
         {

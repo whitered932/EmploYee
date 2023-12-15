@@ -2,7 +2,7 @@
 
 namespace EmploYee.Core.Models;
 
-public class Task(string title, string description, long stageId, double currencyValue, DateTime? endedAtUtc, long performerId)
+public class Task(string title, string description, long stageId, double currencyValue, DateTime? endedAtUtc, List<long> performerIds)
     : BaseEntity
 {
     public void Update(string title, string description, long stageId, double currencyValue, DateTime? endedAtUtc)
@@ -16,7 +16,7 @@ public class Task(string title, string description, long stageId, double currenc
     }
 
     public TaskStatus Status { get; private set; }
-    public long PerformerId { get; private set; } = performerId;
+    public List<long> PerformerIds { get; private set; } = performerIds;
     public string Title { get; private set; } = title;
     public string Description { get; private set; } = description;
     public DateTime? EndedAtUtc { get; private set; } = endedAtUtc;

@@ -12,14 +12,12 @@ public class CreateEmployeeCommand : Command
     public string Surname { get; set; }
     public string Patronymic { get; set; }
     public string City { get; set; }
-    public string Department { get; set; }
+    public long DepartmentId { get; set; }
     public string Curator { get; set; }
     public string Phone { get; set; }
     public string Position { get; set; }
     public long Bithdate { get; set; }
-
     public string Email { get; set; }
-    // public UserAddressDto Address { get;  set; }
 }
 
 public sealed class CreateEmployeeCommandHandler
@@ -27,8 +25,21 @@ public sealed class CreateEmployeeCommandHandler
 {
     public override async Task<Result> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var employee = new Employee(request.FirstName, request.Surname, request.Patronymic, request.Email, "",
-            request.City, "Россия", request.City);
+        var date = DateTimeOffset.FromUnixTimeMilliseconds(request.Bithdate).UtcDateTime;
+        var employee = new Employee(
+            request.FirstName,
+            request.Surname,
+            request.Patronymic,
+            request.Email,
+            "",
+            request.City,
+            "Россия",
+            request.City,
+            request.Curator,
+            request.Position,
+            request.DepartmentId,
+            request.Phone,
+            DateTimeOffset.FromUnixTimeMilliseconds(request.Bithdate).UtcDateTime);
         await employeeRepository.AddAsync(employee, cancellationToken);
         await employeeRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return Successful();

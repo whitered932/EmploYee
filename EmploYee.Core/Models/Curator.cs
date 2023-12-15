@@ -2,11 +2,10 @@
 
 public class Curator : User
 {
-    private Curator() : base() {}
-    
+    private Curator() {}
     public Curator(string firstName, string surname, string patronymic, string email, string password, UserRole role,
-        string city, string country, string name) : base(firstName, surname, patronymic, email, password, role, city,
-        country, name)
+        string city, string country, string name, DateTime birthDateUtc) : base(firstName, surname, patronymic, email, password, role, city,
+        country, name, birthDateUtc)
     {
     }
 }

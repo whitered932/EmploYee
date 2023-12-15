@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -28,6 +29,35 @@ namespace EmploYee.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Meetings",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Participants = table.Column<string>(type: "jsonb", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meetings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stages",
                 columns: table => new
                 {
@@ -49,7 +79,7 @@ namespace EmploYee.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Status = table.Column<int>(type: "integer", nullable: false),
-                    PerformerId = table.Column<long>(type: "bigint", nullable: false),
+                    PerformerIds = table.Column<List<long>>(type: "bigint[]", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     EndedAtUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -76,33 +106,16 @@ namespace EmploYee.Infrastructure.Migrations
                     Role = table.Column<int>(type: "integer", nullable: false),
                     Address_City = table.Column<string>(type: "text", nullable: false),
                     Address_Country = table.Column<string>(type: "text", nullable: false),
-                    Address_Name = table.Column<string>(type: "text", nullable: false)
+                    Address_Name = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    DepartmentId = table.Column<long>(type: "bigint", nullable: true),
+                    Position = table.Column<string>(type: "text", nullable: true),
+                    Curator = table.Column<string>(type: "text", nullable: true),
+                    AchievementHistories = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeeAchievementHistory",
-                columns: table => new
-                {
-                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Image = table.Column<string>(type: "text", nullable: false),
-                    CurrentValue = table.Column<double>(type: "double precision", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeAchievementHistory", x => new { x.EmployeeId, x.Id });
-                    table.ForeignKey(
-                        name: "FK_EmployeeAchievementHistory_Users_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
         }
 
@@ -113,7 +126,10 @@ namespace EmploYee.Infrastructure.Migrations
                 name: "Achievements");
 
             migrationBuilder.DropTable(
-                name: "EmployeeAchievementHistory");
+                name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Meetings");
 
             migrationBuilder.DropTable(
                 name: "Stages");

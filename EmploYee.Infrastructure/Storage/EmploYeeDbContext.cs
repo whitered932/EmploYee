@@ -34,4 +34,6 @@ public class EmploYeeDbContext : DbContext, IUnitOfWork
     public DbSet<Administrator> Administrators { get; set; }
     public DbSet<Curator> Curators { get; set; }
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<Meeting> Meetings { get; set; }
+    public DbSet<Department> Departments { get; set; }
 }

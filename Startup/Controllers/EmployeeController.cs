@@ -17,6 +17,17 @@ public class EmployeeController(IMediator mediator) : BaseController
         return Ok(result.Value);
     }
     
+    [HttpPost("info")]
+    public async Task<IActionResult> GetEmployee([FromBody] GetEmployeeMainInfoQuery query)
+    {
+        var result = await mediator.Send(query);
+        if (!result.IsSuccessfull)
+        {
+            return BadRequest();
+        }
+        return Ok(result.Value);
+    }
+    
     [HttpPost("getMany")]
     public async Task<IActionResult> GetEmployees(GetEmployeesQuery query)
     {
