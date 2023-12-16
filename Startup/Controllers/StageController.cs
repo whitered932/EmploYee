@@ -8,7 +8,7 @@ public class StageController(IMediator mediator) : BaseController
 {
   
     [HttpPost("getMany")]
-    public async Task<IActionResult> GetStages(GetStagesQuery query)
+    public async Task<IActionResult> GetStages([FromBody] GetStagesQuery query)
     {
         var result = await mediator.Send(query);
         if (!result.IsSuccessfull)
@@ -19,7 +19,7 @@ public class StageController(IMediator mediator) : BaseController
     } 
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateStage(CreateStageCommand command)
+    public async Task<IActionResult> CreateStage([FromBody] CreateStageCommand command)
     {
         var result = await mediator.Send(command);
         if (!result.IsSuccessfull)
@@ -30,7 +30,7 @@ public class StageController(IMediator mediator) : BaseController
     }
     
     [HttpPost("delete")]
-    public async Task<IActionResult> DeleteStage(DeleteStageCommand command)
+    public async Task<IActionResult> DeleteStage([FromBody] DeleteStageCommand command)
     {
         var result = await mediator.Send(command);
         if (!result.IsSuccessfull)

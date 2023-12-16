@@ -48,7 +48,7 @@ public sealed class GetEmployeeMainInfoQueryHandler(
             UcoinsCount = 10,
             AllAchievementsCount = achievementCount,
             CurrentAchievementsCount = collectedAchievementsCount,
-            // Todo = collectedAchievementsCount,
+            Todo = new List<object>(),
             TommorowMeetings = tomorrowMeetings,
             TodayMeetings = todayMeetings,
         };
