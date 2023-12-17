@@ -58,6 +58,20 @@ namespace EmploYee.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sessions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    ExpiresAtUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stages",
                 columns: table => new
                 {
@@ -101,13 +115,13 @@ namespace EmploYee.Infrastructure.Migrations
                     Surname = table.Column<string>(type: "text", nullable: false),
                     Patronymic = table.Column<string>(type: "text", nullable: false),
                     BirthdayUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     Address_City = table.Column<string>(type: "text", nullable: false),
                     Address_Country = table.Column<string>(type: "text", nullable: false),
                     Address_Name = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     DepartmentId = table.Column<long>(type: "bigint", nullable: true),
                     Position = table.Column<string>(type: "text", nullable: true),
                     Curator = table.Column<string>(type: "text", nullable: true),
@@ -130,6 +144,9 @@ namespace EmploYee.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Meetings");
+
+            migrationBuilder.DropTable(
+                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "Stages");

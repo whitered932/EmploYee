@@ -2,7 +2,9 @@
 
 public class User : BaseEntity
 {
-    protected User() {}
+    protected User()
+    {
+    }
     
     public User(
         string firstName,
@@ -14,7 +16,7 @@ public class User : BaseEntity
         string city,
         string country,
         string name,
-        DateTime birthdayUtc)
+        DateTime birthdayUtc, string phoneNumber)
     {
         FirstName = firstName;
         Surname = surname;
@@ -23,6 +25,7 @@ public class User : BaseEntity
         Password = password;
         Role = role;
         BirthdayUtc = birthdayUtc;
+        PhoneNumber = phoneNumber;
         Address = new UserAddress(city, country, name);
     }
 
@@ -35,6 +38,8 @@ public class User : BaseEntity
     public string Surname { get; private set; }
     public string Patronymic { get; private set; }
     public DateTime BirthdayUtc { get; private set; }
+    public string PhoneNumber { get; private set; }
+
 
     public string Email { get; private set; }
     public string Password { get; private set; }

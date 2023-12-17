@@ -15,6 +15,7 @@ public static class DependencyInjection
 
         services.RegisterRepository<IEmployeeRepository, EmployeeRepository>();
         services.RegisterRepository<ITaskRepository, TaskRepository>();
+        services.RegisterRepository<ISessionRepository, SessionRepository>();
         services.RegisterRepository<IUserRepository, UserRepository>();
         services.RegisterRepository<IStageRepository, StageRepository>();
         services.RegisterRepository<ICuratorRepository, CuratorRepository>();

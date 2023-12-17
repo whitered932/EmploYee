@@ -18,17 +18,15 @@ public class Employee : User
         long departmentId,
         string phoneNumber,
         DateTime birthDateTime
-    ) : base(firstName, surname, patronymic, email, password, UserRole.Employee, city, country, name, birthDateTime)
+    ) : base(firstName, surname, patronymic, email, password, UserRole.Employee, city, country, name, birthDateTime, phoneNumber)
     {
         Curator = curator;
         Position = position;
         DepartmentId = departmentId;
-        PhoneNumber = phoneNumber;
         AchievementHistories = new List<EmployeeAchievementHistory>();
     }
 
     public IReadOnlyCollection<EmployeeAchievementHistory> AchievementHistories { get; private set; }
-    public string PhoneNumber { get; private set; }
     public long DepartmentId { get; private set; }
     public string Position { get; private set; }
     public string Curator { get; private set; }

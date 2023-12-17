@@ -3,8 +3,9 @@
 public class Administrator : User
 {
     private Administrator()
-    {}
-    
+    {
+    }
+
     public Administrator(
         string firstName,
         string surname,
@@ -15,10 +16,11 @@ public class Administrator : User
         string city,
         string country,
         string name,
-        DateTime birthdayUtc
+        DateTime birthdayUtc,
+        string phoneNumber
     ) : base(firstName, surname,
         patronymic, email, password,
-        role, city, country, name, birthdayUtc)
+        role, city, country, name, birthdayUtc, phoneNumber)
     {
     }
 }

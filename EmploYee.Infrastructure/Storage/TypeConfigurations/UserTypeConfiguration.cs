@@ -14,6 +14,11 @@ public class UserTypeConfiguration : IEntityTypeConfiguration<User>
             .HasValue<Administrator>(UserRole.Administrator)
             .HasValue<Employee>(UserRole.Employee)
             .HasValue<Curator>(UserRole.Curator);
-        builder.OwnsOne(x => x.Address);
+        builder.OwnsOne(x => x.Address, b =>
+        {
+            b.Property(x => x.City);
+            b.Property(x => x.Country);
+            b.Property(x => x.Name);
+        });
     }
 }

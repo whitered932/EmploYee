@@ -18,7 +18,10 @@ public class EmploYeeDbContext : DbContext, IUnitOfWork
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Host=localhost;Database=employee;Username=postgres;Password=postgres");
+    {
+        optionsBuilder.UseNpgsql("Host=localhost;Database=employee;Username=postgres;Password=postgres");
+        optionsBuilder.EnableSensitiveDataLogging();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,4 +39,5 @@ public class EmploYeeDbContext : DbContext, IUnitOfWork
     public DbSet<Employee> Employees { get; set; }
     public DbSet<Meeting> Meetings { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Session> Sessions { get; set; }
 }

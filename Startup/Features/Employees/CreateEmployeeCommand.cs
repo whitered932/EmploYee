@@ -3,6 +3,7 @@ using EmploYee.Core.Repositories;
 using Ftsoft.Application.Cqs.Mediatr;
 using Ftsoft.Common.Result;
 using Startup.Features.Employees.Models;
+using Startup.Helpers;
 
 namespace Startup.Features.Employees;
 
@@ -31,7 +32,7 @@ public sealed class CreateEmployeeCommandHandler
             request.Surname,
             request.Patronymic,
             request.Email,
-            "",
+            PasswordHasher.Hash("password"),
             request.City,
             "Россия",
             request.City,

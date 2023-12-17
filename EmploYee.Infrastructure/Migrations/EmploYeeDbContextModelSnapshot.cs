@@ -88,6 +88,25 @@ namespace EmploYee.Infrastructure.Migrations
                     b.ToTable("Meetings");
                 });
 
+            modelBuilder.Entity("EmploYee.Core.Models.Session", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sessions");
+                });
+
             modelBuilder.Entity("EmploYee.Core.Models.Stage", b =>
                 {
                     b.Property<long>("Id")
@@ -176,6 +195,10 @@ namespace EmploYee.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -216,10 +239,6 @@ namespace EmploYee.Infrastructure.Migrations
 
                     b.Property<long>("DepartmentId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Position")
                         .IsRequired()
