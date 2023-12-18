@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Startup.Features.Employees;
 
@@ -6,6 +7,7 @@ namespace Startup.Controllers;
 
 public class EmployeeController(IMediator mediator) : BaseController
 {
+    [Authorize]
     [HttpPost("getOne")]
     public async Task<IActionResult> GetEmployee([FromBody] GetEmployeeQuery query)
     {
@@ -17,6 +19,7 @@ public class EmployeeController(IMediator mediator) : BaseController
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpPost("info")]
     public async Task<IActionResult> GetEmployee([FromBody] GetEmployeeMainInfoQuery query)
     {

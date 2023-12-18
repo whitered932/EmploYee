@@ -35,11 +35,14 @@ builder.Services.AddInfrastructure(builder.Configuration.GetConnectionString("De
 
 var app = builder.Build();
 
+app.UseRouting();
 app.UseCors(x => x
-    .AllowAnyMethod()
     .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
+    .WithMethods("POST")
+    .WithOrigins("https://localhost:5173")
     .AllowCredentials());
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -48,6 +51,5 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

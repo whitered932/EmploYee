@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Startup.Features.Department;
 using Startup.Features.Meeting;
@@ -7,6 +8,7 @@ namespace Startup.Controllers;
 
 public class DepartmentsController(IMediator mediator) : BaseController
 {
+    [Authorize]
     [HttpPost("getMany")]
     public async Task<IActionResult> GetDepartment([FromBody] GetDepartmentsQuery query)
     {
@@ -18,6 +20,7 @@ public class DepartmentsController(IMediator mediator) : BaseController
         return Ok(result.Value);
     }
     
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateDepartment([FromBody] CreateDepartmentCommand command)
     {

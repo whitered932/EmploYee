@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Startup.Features.Stage;
 
@@ -7,6 +8,7 @@ namespace Startup.Controllers;
 public class StageController(IMediator mediator) : BaseController
 {
   
+    [Authorize]
     [HttpPost("getMany")]
     public async Task<IActionResult> GetStages([FromBody] GetStagesQuery query)
     {
@@ -18,6 +20,7 @@ public class StageController(IMediator mediator) : BaseController
         return Ok(result.Value);
     } 
     
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateStage([FromBody] CreateStageCommand command)
     {
@@ -29,6 +32,7 @@ public class StageController(IMediator mediator) : BaseController
         return Ok();
     }
     
+    [Authorize]
     [HttpPost("delete")]
     public async Task<IActionResult> DeleteStage([FromBody] DeleteStageCommand command)
     {

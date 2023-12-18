@@ -7,8 +7,8 @@ namespace Startup.Controllers;
 
 public class CommunicationController(IMediator mediator) : BaseController
 {
-    [HttpPost]
     [Authorize]
+    [HttpPost]
     public async Task<IActionResult> Get([FromBody] GetCommunicationsQuery query)
     {
         var result = await mediator.Send(query);
@@ -16,6 +16,7 @@ public class CommunicationController(IMediator mediator) : BaseController
         {
             return BadRequest();
         }
+
         return Ok(result.Value);
-    } 
+    }
 }

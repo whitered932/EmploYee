@@ -19,8 +19,8 @@ public class AuthController(IMediator mediator) : BaseController
         return Ok();
     }
 
-    [HttpPost("profile")]
     [Authorize]
+    [HttpPost("profile")]
     public async Task<ActionResult<AccountInfoDto>> Profile([FromBody] GetProfileQuery query)
     {
         var result = await mediator.Send(query);

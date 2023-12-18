@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Startup.Features.Employees;
 using Startup.Features.Meeting;
@@ -18,6 +19,7 @@ public class MeetingsController(IMediator mediator) : BaseController
     //     return Ok(result.Value);
     // }
     
+    [Authorize]
     [HttpPost("getMany")]
     public async Task<IActionResult> GetEmployees(GetMeetingsQuery query)
     {
