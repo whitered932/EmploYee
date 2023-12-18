@@ -65,4 +65,16 @@ public class TaskController(IMediator mediator) : BaseController
         }
         return Ok();
     }
+    
+    [Authorize]
+    [HttpPost("check")]
+    public async Task<IActionResult> Check([FromBody] CheckTaskCommand command)
+    {
+        var result = await mediator.Send(command);
+        if (!result.IsSuccessfull)
+        {
+            return BadRequest();
+        }
+        return Ok();
+    }
 }

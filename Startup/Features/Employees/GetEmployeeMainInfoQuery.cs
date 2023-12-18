@@ -7,6 +7,8 @@ using Ftsoft.Domain.Specification;
 using Startup.Features.Employees.Models;
 using Startup.Features.Errors;
 using Startup.Features.Meeting.Models;
+using Startup.Features.Task.Models;
+using Startup.Providers;
 using TaskStatus = EmploYee.Core.Models.TaskStatus;
 
 namespace Startup.Features.Employees;
@@ -19,6 +21,7 @@ public sealed class GetEmployeeMainInfoQueryHandler(
     IEmployeeRepository employeeRepository,
     ITaskRepository taskRepository,
     IAchievementRepository achievementRepository,
+    ISecurityProvider securityProvider,
     IMeetingRepository meetingRepository,
     IDepartmentRepository departmentRepository
 ) : QueryHandler<GetEmployeeMainInfoQuery, EmployeeMainInfoDto>
@@ -26,8 +29,9 @@ public sealed class GetEmployeeMainInfoQueryHandler(
     public override async Task<Result<EmployeeMainInfoDto>> Handle(GetEmployeeMainInfoQuery request,
         CancellationToken cancellationToken)
     {
+        var user = securityProvider.SecurityProfile.User;
         var employee =
-            await employeeRepository.SingleOrDefaultAsync(EmployeeSpecification.GetById(1).IsSatisfiedBy(),
+            await employeeRepository.SingleOrDefaultAsync(EmployeeSpecification.GetById(user.Id).IsSatisfiedBy(),
                 cancellationToken);
         if (employee is null)
         {
@@ -41,14 +45,20 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         var endDate = startDate.AddDays(2);
 
         var (todayMeetings, tomorrowMeetings) = await GetMeetings(employee, startDate, endDate, cancellationToken);
-
+        var tasks = await taskRepository.ListAsync(x => x.PerformerIds.Contains(user.Id), cancellationToken);
+        var taskDtos = tasks.Select(x => new ItemTaskDto()
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Checked = x.IsChecked()
+        }).ToList();
         var employeeDto = new EmployeeMainInfoDto()
         {
             ProgressPercentage = 100,
             UcoinsCount = 10,
             AllAchievementsCount = achievementCount,
             CurrentAchievementsCount = collectedAchievementsCount,
-            Todo = new List<object>(),
+            Todo = taskDtos,
             TommorowMeetings = tomorrowMeetings,
             TodayMeetings = todayMeetings,
         };

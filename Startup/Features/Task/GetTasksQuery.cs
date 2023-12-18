@@ -57,7 +57,8 @@ public sealed class GetTasksQueryHandler
             Title = task.Title,
             CurrencyValue = task.CurrencyValue,
             StageId = task.StageId,
-            EndedAtUtc = task.EndedAtUtc
+            EndedAtUtc = task.EndedAtUtc,
+            IsChecked = task.IsChecked()
         }).ToList();
         return Successful(taskDtos);
     }

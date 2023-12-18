@@ -27,4 +27,9 @@ public class Task(string title, string description, long stageId, double currenc
     {
         Status = status;
     }
+
+    public bool IsChecked()
+    {
+        return Status is TaskStatus.Ready;
+    }
 }

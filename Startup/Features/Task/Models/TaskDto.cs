@@ -8,4 +8,5 @@ public class TaskDto
     public DateTime? EndedAtUtc { get; set; }
     public long StageId { get; set; }
     public double CurrencyValue { get; set; }
+    public bool IsChecked { get; set; }
 }
