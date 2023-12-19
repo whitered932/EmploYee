@@ -13,7 +13,7 @@ public class CreateEmployeeCommand : Command
     public string Surname { get; set; }
     public string Patronymic { get; set; }
     public string City { get; set; }
-    public long DepartmentId { get; set; }
+    public long Department { get; set; }
     public string Curator { get; set; }
     public string Phone { get; set; }
     public string Position { get; set; }
@@ -29,7 +29,7 @@ public sealed class CreateEmployeeCommandHandler
     {
         var date = DateTimeOffset.FromUnixTimeMilliseconds(request.Bithdate).UtcDateTime;
         var department =
-            await departmentRepository.SingleOrDefaultAsync(x => x.Id == request.DepartmentId, cancellationToken);
+            await departmentRepository.SingleOrDefaultAsync(x => x.Id == request.Department, cancellationToken);
 
         var employee = new Employee(
             request.FirstName,
@@ -42,7 +42,7 @@ public sealed class CreateEmployeeCommandHandler
             request.City,
             request.Curator,
             request.Position,
-            request.DepartmentId,
+            request.Department,
             request.Phone,
             date,
             department?.Title ?? "Неизвестен");
