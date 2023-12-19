@@ -52,10 +52,14 @@ public sealed class GetEmployeeMainInfoQueryHandler(
             Title = x.Title,
             Checked = x.IsChecked()
         }).ToList();
+
+        var progress = ((double)taskDtos.Count(x => x.Checked) + collectedAchievementsCount) /
+            (achievementCount + taskDtos.Count) * 100;
+
         var employeeDto = new EmployeeMainInfoDto()
         {
-            ProgressPercentage = 100,
-            UcoinsCount = 10,
+            ProgressPercentage = (int)progress,
+            UcoinsCount = employee.Balance,
             AllAchievementsCount = achievementCount,
             CurrentAchievementsCount = collectedAchievementsCount,
             Todo = taskDtos,

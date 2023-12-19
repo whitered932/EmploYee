@@ -6,7 +6,7 @@ namespace Startup.Features.Employees.Models;
 public class EmployeeMainInfoDto
 {
     public int ProgressPercentage { get; set; }
-    public int UcoinsCount { get; set; }
+    public double UcoinsCount { get; set; }
     public int AllAchievementsCount { get; set; }
     public int CurrentAchievementsCount { get; set; }
     public List<ItemTaskDto> Todo { get; set; }

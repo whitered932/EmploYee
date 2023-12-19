@@ -24,17 +24,35 @@ public class Employee : User
         Position = position;
         DepartmentId = departmentId;
         AchievementHistories = new List<EmployeeAchievementHistory>();
+        Balance = 0;
     }
 
     public IReadOnlyCollection<EmployeeAchievementHistory> AchievementHistories { get; private set; }
     public long DepartmentId { get; private set; }
     public string Position { get; private set; }
     public string Curator { get; private set; }
+    public double Balance { get; private set; }
 
+    public void Debit(double value)
+    {
+        Balance += value;
+    }
+
+    public void Credit(double value)
+    {
+        if (Balance - value < 0)
+        {
+            return;
+        }
+        Balance -= value;
+    }
+    
     public void AddAchievement(EmployeeAchievementHistory achievementHistory)
     {
         var newEmployeeAchievements = AchievementHistories.ToList();
         newEmployeeAchievements.Add(achievementHistory);
+        
         AchievementHistories = newEmployeeAchievements;
+        Balance += achievementHistory.CurrentValue;
     }
 }

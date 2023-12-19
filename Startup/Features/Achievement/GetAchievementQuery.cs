@@ -30,7 +30,7 @@ public sealed class GetAchievementQueryHandler
         {
             Id = achievement.Id,
             Title =  achievement.Title,
-            Image = achievement.Image,
+            Img = achievement.Image,
             CurrentValue = achievement.CurrentValue
         };
         return Successful(achievementDto);
