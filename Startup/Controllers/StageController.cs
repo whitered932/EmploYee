@@ -43,4 +43,16 @@ public class StageController(IMediator mediator) : BaseController
         }
         return Ok();
     }
+    
+    [Authorize]
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateStage([FromBody] UpdateStageCommand command)
+    {
+        var result = await mediator.Send(command);
+        if (!result.IsSuccessfull)
+        {
+            return BadRequest();
+        }
+        return Ok();
+    }
 }
