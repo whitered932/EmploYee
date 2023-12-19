@@ -42,7 +42,7 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         var collectedAchievementsCount = employee.AchievementHistories.Count;
 
         var startDate = DateTime.UtcNow.Date;
-        var endDate = startDate.AddDays(2);
+        var endDate = startDate.AddDays(1);
 
         var (todayMeetings, tomorrowMeetings) = await GetMeetings(employee, startDate, endDate, cancellationToken);
         var tasks = await taskRepository.Query(x =>
@@ -79,7 +79,7 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         DateTime endDate, CancellationToken cancellationToken)
     {
         var meetings =
-            await meetingRepository.ListAsync(MeetingSpecification.GetByParticipantId(employee.Id, startDate, endDate),
+            await meetingRepository.ListAsync(MeetingSpecification.GetByParticipantId(employee.Id, startDate, endDate.Date.AddDays(1)),
                 cancellationToken);
 
         var todayMeetings = meetings.Where(x => startDate < x.Date && x.Date < startDate.AddDays(1)).Select(x =>
@@ -90,7 +90,7 @@ public sealed class GetEmployeeMainInfoQueryHandler(
                 Id = x.Id,
                 Date = new DateTimeOffset(x.Date).ToUnixTimeMilliseconds()
             }).ToList();
-        var tomorrowMeetings = meetings.Where(x => endDate < x.Date && x.Date < endDate.AddDays(1)).Select(x =>
+        var tomorrowMeetings = meetings.Where(x => endDate < x.Date && x.Date < endDate.AddDays(2)).Select(x =>
             new GetMeetingDto()
             {
                 Title = x.Title,
