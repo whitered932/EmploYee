@@ -10,5 +10,10 @@ public class Department : BaseEntity
     }
 
 
+    public void Update(string title)
+    {
+        Title = title;
+    }
+
     public string Title { get; private set; }
 }

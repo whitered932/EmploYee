@@ -31,4 +31,29 @@ public class DepartmentsController(IMediator mediator) : BaseController
         }
         return Ok();
     } 
+      
+    [Authorize]
+    [HttpPost("delete")]
+    public async Task<IActionResult> DeleteDepartment([FromBody] DeleteDepartmentCommand command)
+    {
+        var result = await mediator.Send(command);
+        if (!result.IsSuccessfull)
+        {
+            return BadRequest();
+        }
+        return Ok();
+    } 
+    
+        
+    [Authorize]
+    [HttpPost("update")]
+    public async Task<IActionResult> UpdateDepartment([FromBody] UpdateDepartmentCommand command)
+    {
+        var result = await mediator.Send(command);
+        if (!result.IsSuccessfull)
+        {
+            return BadRequest();
+        }
+        return Ok();
+    } 
 }
