@@ -11,9 +11,9 @@ public class DeleteDepartmentCommand : Command
     public long Id { get; set; }
 }
 
-public sealed class DeleteDepartmentCommandHandler(IDepartmentRepository departmentRepository) : CommandHandler<DeleteAchievementCommand>
+public sealed class DeleteDepartmentCommandHandler(IDepartmentRepository departmentRepository) : CommandHandler<DeleteDepartmentCommand>
 {
-    public override async Task<Result> Handle(DeleteAchievementCommand request, CancellationToken cancellationToken)
+    public override async Task<Result> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
         var department = await departmentRepository.SingleOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (department is null)
