@@ -20,7 +20,7 @@ public sealed class GetEmployeesQueryHandler
         {
             Id = employee.Id,
             Name = employee.GetFullName(),
-            Department = "",
+            Department = employee.DepartmentTitle,
         }).ToList();
         return Successful(employeeDtos);
     }

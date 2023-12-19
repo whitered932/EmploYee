@@ -22,11 +22,15 @@ public class CreateEmployeeCommand : Command
 }
 
 public sealed class CreateEmployeeCommandHandler
-    (IEmployeeRepository employeeRepository) : CommandHandler<CreateEmployeeCommand>
+(IEmployeeRepository employeeRepository,
+    IDepartmentRepository departmentRepository) : CommandHandler<CreateEmployeeCommand>
 {
     public override async Task<Result> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
         var date = DateTimeOffset.FromUnixTimeMilliseconds(request.Bithdate).UtcDateTime;
+        var department =
+            await departmentRepository.SingleOrDefaultAsync(x => x.Id == request.DepartmentId, cancellationToken);
+
         var employee = new Employee(
             request.FirstName,
             request.Surname,
@@ -40,7 +44,8 @@ public sealed class CreateEmployeeCommandHandler
             request.Position,
             request.DepartmentId,
             request.Phone,
-            DateTimeOffset.FromUnixTimeMilliseconds(request.Bithdate).UtcDateTime);
+            date,
+            department?.Title ?? "Неизвестен");
         await employeeRepository.AddAsync(employee, cancellationToken);
         await employeeRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
         return Successful();

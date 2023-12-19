@@ -45,7 +45,12 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         var endDate = startDate.AddDays(2);
 
         var (todayMeetings, tomorrowMeetings) = await GetMeetings(employee, startDate, endDate, cancellationToken);
-        var tasks = await taskRepository.ListAsync(x => x.PerformerIds.Contains(user.Id), cancellationToken);
+        var tasks = await taskRepository.Query(x =>
+        {
+            x = x.Where(b => b.PerformerIds.Contains(user.Id));
+            return x.OrderBy(b => b.Id);
+
+        }, cancellationToken);
         var taskDtos = tasks.Select(x => new ItemTaskDto()
         {
             Id = x.Id,
