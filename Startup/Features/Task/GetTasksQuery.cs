@@ -29,12 +29,14 @@ public sealed class GetTasksQueryHandler
             {
                 if (request.UserId is not null)
                 {
-                    if (authorizedUser.Role is UserRole.Employee or UserRole.Unknown)
-                    {
-                        throw new Exception("");
-                    }
+                    q = authorizedUser.Role is UserRole.Employee or UserRole.Unknown
+                        ? q.Where(x => x.PerformerIds.Contains(authorizedUser.Id))
+                        : q.Where(x => x.PerformerIds.Contains((long)request.UserId));
+                }
 
-                    q = q.Where(x => x.PerformerIds.Contains((long)request.UserId));
+                if (request.UserId is null && authorizedUser.Role is UserRole.Employee)
+                {
+                    q = q.Where(x => x.PerformerIds.Contains(authorizedUser.Id));
                 }
 
                 if (request.StageId is not null)

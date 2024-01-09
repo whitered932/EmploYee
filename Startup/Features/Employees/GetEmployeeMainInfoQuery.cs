@@ -9,12 +9,12 @@ using Startup.Features.Errors;
 using Startup.Features.Meeting.Models;
 using Startup.Features.Task.Models;
 using Startup.Providers;
-using TaskStatus = EmploYee.Core.Models.TaskStatus;
 
 namespace Startup.Features.Employees;
 
 public class GetEmployeeMainInfoQuery : Query<EmployeeMainInfoDto>
 {
+    public long? UserId { get; set; }
 }
 
 public sealed class GetEmployeeMainInfoQueryHandler(
@@ -30,8 +30,14 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         CancellationToken cancellationToken)
     {
         var user = securityProvider.SecurityProfile.User;
+        if (user.Role is UserRole.Employee && request.UserId is not null)
+        {
+            return Error(BadRequestError.Instance);
+        }
+
+        var userId = request.UserId ?? securityProvider.SecurityProfile.User.Id;
         var employee =
-            await employeeRepository.SingleOrDefaultAsync(EmployeeSpecification.GetById(user.Id).IsSatisfiedBy(),
+            await employeeRepository.SingleOrDefaultAsync(EmployeeSpecification.GetById(userId).IsSatisfiedBy(),
                 cancellationToken);
         if (employee is null)
         {
@@ -49,7 +55,6 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         {
             x = x.Where(b => b.PerformerIds.Contains(user.Id));
             return x.OrderBy(b => b.Id);
-
         }, cancellationToken);
         var taskDtos = tasks.Select(x => new ItemTaskDto()
         {
@@ -79,7 +84,8 @@ public sealed class GetEmployeeMainInfoQueryHandler(
         DateTime endDate, CancellationToken cancellationToken)
     {
         var meetings =
-            await meetingRepository.ListAsync(MeetingSpecification.GetByParticipantId(employee.Id, startDate, endDate.Date.AddDays(1)),
+            await meetingRepository.ListAsync(
+                MeetingSpecification.GetByParticipantId(employee.Id, startDate, endDate.Date.AddDays(1)),
                 cancellationToken);
 
         var todayMeetings = meetings.Where(x => startDate < x.Date && x.Date < startDate.AddDays(1)).Select(x =>

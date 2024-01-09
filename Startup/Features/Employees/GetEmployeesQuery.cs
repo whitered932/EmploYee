@@ -7,6 +7,7 @@ namespace Startup.Features.Employees;
 
 public class GetEmployeesQuery : Query<IReadOnlyList<EmployeeItemDto>>
 {
+    public long? DepartmentId { get; set; }
 }
 
 public sealed class GetEmployeesQueryHandler
@@ -15,7 +16,15 @@ public sealed class GetEmployeesQueryHandler
     public override async Task<Result<IReadOnlyList<EmployeeItemDto>>> Handle(GetEmployeesQuery request,
         CancellationToken cancellationToken)
     {
-        var employees = await employeeRepository.ListAsync(cancellationToken);
+        var employees = await employeeRepository.Query(q =>
+        {
+            if (request.DepartmentId is not null)
+            {
+                q = q.Where(x => x.DepartmentId == request.DepartmentId);
+            }
+
+            return q;
+        }, cancellationToken);
         var employeeDtos = employees.Select(employee => new EmployeeItemDto()
         {
             Id = employee.Id,
