@@ -30,6 +30,7 @@ public sealed class GetEmployeesQueryHandler
             Id = employee.Id,
             Name = employee.GetFullName(),
             Department = employee.DepartmentTitle,
+            DepartmentId = employee.DepartmentId
         }).ToList();
         return Successful(employeeDtos);
     }

@@ -36,7 +36,7 @@ public sealed class GetEmployeeQueryHandler
         var employeeTasks = await taskRepository.ListAsync(
             TaskSpecification.GetByAssignedId(employee.Id).IsSatisfiedBy(),
             cancellationToken);
-        var completedCount = employeeTasks.Count(x => x.Status == TaskStatus.Approved);
+        var completedCount = employeeTasks.Count(x => x.Status == TaskStatus.Ready);
         var taskCount = employeeTasks.Count;
 
         var achievementCount = await achievementRepository.CountAsync(cancellationToken);
